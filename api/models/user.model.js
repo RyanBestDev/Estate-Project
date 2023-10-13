@@ -16,6 +16,10 @@ const userSchema = mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		avatar: {
+			type: String,
+			default: 'https://static.thenounproject.com/png/4174833-200.png',
+		},
 	},
 	{ timestamps: true }
 );
