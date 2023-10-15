@@ -5,7 +5,7 @@ import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 
 export const signUp = async (req, res, next) => {
-	const { username, password, email } = req.body;
+	const { username, password, email, loading, error } = req.body;
 
 	try {
 		const hashedPassword = bcrypt.hashSync(password, 10);
@@ -45,7 +45,7 @@ export const google = async (req, res, next) => {
 		if (user) {
 			const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 			const { password: pass, ...rest } = user._doc;
-			res.cookie(token, { httpOnly: true }).status(200).send(rest);
+			res.cookie('acess_token', token, { httpOnly: true }).status(200).send(rest);
 		} else {
 			const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-4);
 			const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
@@ -58,7 +58,7 @@ export const google = async (req, res, next) => {
 			await newUser.save();
 			const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
 			const { password: pass, ...rest } = newUser._doc;
-			res.cookie(token, { httpOnly: true }).status(200).send(rest);
+			res.cookie('acess_token', token, { httpOnly: true }).status(200).send(rest);
 		}
 	} catch (error) {
 		next(error);
