@@ -1,17 +1,11 @@
-import {
-	createBrowserRouter,
-	RouterProvider,
-	Outlet,
-	Navigate,
-	createRoutesFromElements,
-	Route,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Home from './pages/Home';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import About from './pages/About';
 import Profile from './pages/Profile';
 import Header from './components/Header';
+import CreateListing from './pages/CreateListing';
 import PrivateRoute from './components/PrivateRoute';
 
 export default function App() {
@@ -50,6 +44,12 @@ export default function App() {
 					path: '/profile',
 					element: <PrivateRoute />,
 					children: [{ path: '', element: <Profile /> }],
+					//loader: teamLoader,
+				},
+				{
+					path: '/create-listing',
+					element: <PrivateRoute />,
+					children: [{ path: '', element: <CreateListing /> }],
 					//loader: teamLoader,
 				},
 			],
