@@ -24,6 +24,8 @@ export default function Profile() {
 	const [fileUploadError, setFileUploadError] = useState(null);
 	const [formData, setFormData] = useState({});
 	const [updateSucess, setUpdateSucess] = useState(false);
+	const [showListingsError, setShowListingsError] = useState(null);
+	const [userListings, setUserListings] = useState([]);
 	const dispatch = useDispatch();
 
 	const handleSubmit = async (event) => {
@@ -116,6 +118,22 @@ export default function Profile() {
 		);
 	};
 
+	const handleShowListings = async () => {
+		try {
+			setShowListingsError(null);
+			const res = await fetch(`/api/user/listings/${currentUser._id}`);
+			const data = await res.json();
+
+			if (data.success === false) {
+				setShowListingsError(data.message);
+			}
+
+			setUserListings(data);
+		} catch (error) {
+			setShowListingsError(error.message);
+		}
+	};
+
 	useEffect(() => {
 		if (file) {
 			handleFileUpload(file);
@@ -205,6 +223,42 @@ export default function Profile() {
 			</div>
 			<p className='text-red-700 mt-5'>{error ? error : ''}</p>
 			<p className='text-green-700 mt-5'>{updateSucess ? 'Sucess' : ''}</p>
+			<button
+				onClick={handleShowListings}
+				className='text-green-700 w-full text-center'
+			>
+				Show Listings
+			</button>
+			<p className='text-red-700 w-full text-center underline'>{showListingsError && showListingsError}</p>
+			{userListings && userListings.length > 0 && (
+				<div className='flex flex-col gap-4'>
+					<h1 className='text-center mt-7 text-3xl font-semibold'>Your Listings</h1>
+					{userListings.map((listing) => (
+						<div
+							className='border rounded-lg p-3 flex justify-between items-center gap-4'
+							key={listing._id}
+						>
+							<Link to={`/listing/${listing._id}`}>
+								<img
+									className='h-16 w-16 object-contain'
+									src={listing.imageUrls[0]}
+									alt='listing image'
+								/>
+							</Link>
+							<Link
+								to={`/listing/${listing._id}`}
+								className='text-slate-700 font-semibold flex-1 hover:underline truncate'
+							>
+								<p className=''>{listing.name}</p>
+							</Link>
+							<div className='flex flex-col items-center'>
+								<button className='text-red-700 uppercase'>Delete</button>
+								<button className='text-green-700 uppercase'>Edit</button>
+							</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
