@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import Header from './components/Header';
 import CreateListing from './pages/CreateListing';
 import PrivateRoute from './components/PrivateRoute';
+import UpdateListings from './pages/UpdateListings';
 
 export default function App() {
 	const router = createBrowserRouter([
@@ -50,6 +51,12 @@ export default function App() {
 					path: '/create-listing',
 					element: <PrivateRoute />,
 					children: [{ path: '', element: <CreateListing /> }],
+					//loader: teamLoader,
+				},
+				{
+					path: '/update-listing/:listingId',
+					element: <PrivateRoute />,
+					children: [{ path: '', element: <UpdateListings /> }],
 					//loader: teamLoader,
 				},
 			],
